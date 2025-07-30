@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""Asynchronous coroutine returning a random delay.
+"""
+0‑basic_async_syntax
+====================
 
-`wait_random` attends un temps aléatoire compris entre 0 et `max_delay`
-(inclus) puis renvoie cette durée.
+Asynchronous coroutine *wait_random*:
+    • prend `max_delay` (int, par défaut 10)
+    • attend un délai aléatoire ∈ [0, max_delay] secondes (float)
+    • retourne ce délai.
+
+Utilise `random.uniform` et `asyncio.sleep`.
 """
 
 import asyncio
@@ -11,10 +17,11 @@ from typing import Union
 
 
 async def wait_random(max_delay: int = 10) -> float:
-    """Wait for *delay* seconds, where *delay* ∈ [0, max_delay].
+    """
+    Wait for a random delay and return it.
 
     Args:
-        max_delay: upper bound in seconds (default 10).
+        max_delay: upper bound in seconds (default 10).
 
     Returns:
         The actual delay used, as a float.

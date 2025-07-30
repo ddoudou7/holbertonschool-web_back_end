@@ -1,19 +1,33 @@
 #!/usr/bin/env python3
-"""Measure the average runtime of `wait_n`."""
+"""
+2‑measure_runtime
+=================
+
+Fonction *measure_time* :
+    • mesure le temps total d'exécution de `wait_n`
+    • renvoie le temps moyen par coroutine.
+"""
 
 import asyncio
 import time
 from typing import Callable
 
-# Import ici pour garder la dépendance locale au package
-wait_n: Callable[[int, int], asyncio.Future] = __import__(
-    "python_async_function.1-concurrent_coroutines",
-    fromlist=["wait_n"],
-).wait_n
+wait_n: Callable[[int, int], asyncio.Future] = (
+    __import__('1-concurrent_coroutines').wait_n
+)
 
 
 def measure_time(n: int, max_delay: int) -> float:
-    """Return average time (in seconds) to execute `wait_n` *per coroutine*."""
+    """
+    Measure average runtime of `wait_n(n, max_delay)`.
+
+    Args:
+        n: number of coroutines.
+        max_delay: max bound for each delay.
+
+    Returns:
+        Average time per coroutine (float).
+    """
     start = time.perf_counter()
     asyncio.run(wait_n(n, max_delay))
     total = time.perf_counter() - start
