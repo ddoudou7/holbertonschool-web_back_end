@@ -1,1 +1,1 @@
-"""Asynchronous function project package."""
+"""Package for async function tasks."""
