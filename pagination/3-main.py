@@ -2,8 +2,8 @@
 """ Main file """
 
 Server = __import__('3-hypermedia_del_pagination').Server
-server = Server()
 
+server = Server()
 server.indexed_dataset()
 
 try:
@@ -13,6 +13,7 @@ except AssertionError:
 
 index = 3
 page_size = 2
+
 print("Nb items: {}".format(len(server._Server__indexed_dataset)))
 
 # 1- request first index
@@ -26,8 +27,8 @@ print(server.get_hyper_index(res.get('next_index'), page_size))
 del server._Server__indexed_dataset[res.get('index')]
 print("Nb items: {}".format(len(server._Server__indexed_dataset)))
 
-# 4- request again the initial index
+# 4- request again the initial index -> the first data is different
 print(server.get_hyper_index(index, page_size))
 
-# 5- request again initial next index
+# 5- request again initial next index -> same data page as step 2
 print(server.get_hyper_index(res.get('next_index'), page_size))

@@ -2,17 +2,16 @@
 """Deletion-resilient hypermedia pagination."""
 
 import csv
-from typing import Dict, List, Optional, Any
+from typing import List, Dict
 
 
 class Server:
     """Server class to paginate a database of popular baby names."""
-
     DATA_FILE = "Popular_Baby_Names.csv"
 
-    def __init__(self) -> None:
-        self.__dataset: Optional[List[List]] = None
-        self.__indexed_dataset: Optional[Dict[int, List]] = None
+    def __init__(self):
+        self.__dataset = None
+        self.__indexed_dataset = None
 
     def dataset(self) -> List[List]:
         """Cached dataset (skip header row)."""
@@ -30,18 +29,8 @@ class Server:
             self.__indexed_dataset = {i: data[i] for i in range(len(data))}
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: Optional[int] = None,
-                        page_size: int = 10) -> Dict[str, Any]:
-        """Return a page starting from a given index, robust to deletions.
-
-        Returns:
-            {
-              "index": int,       # starting index used
-              "next_index": int,  # index to use for next page
-              "page_size": int,   # number of items actually returned
-              "data": List[List]  # page rows
-            }
-        """
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+        """Return a page starting from a given index, robust to deletions."""
         if index is None:
             index = 0
 
