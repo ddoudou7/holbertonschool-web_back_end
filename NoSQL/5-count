@@ -1,2 +1,2 @@
 // my comment
-printjson(db.school.countDocuments())
+db.school.count()
