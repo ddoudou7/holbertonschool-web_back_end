@@ -1,2 +1,2 @@
-// my comment
+#!/usr/bin/env mongo
 show dbs
