@@ -11,10 +11,9 @@ if __name__ == "__main__":
     print(f"{logs_count} logs")
 
     print("Methods:")
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    for method in methods:
-        count = collection.count_documents({"method": method})
-        print(f"\tmethod {method}: {count}")
+    for method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
+        cnt = collection.count_documents({"method": method})
+        print(f"\tmethod {method}: {cnt}")
 
     status_check = collection.count_documents(
         {"method": "GET", "path": "/status"}
