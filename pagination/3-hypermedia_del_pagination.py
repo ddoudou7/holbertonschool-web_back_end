@@ -27,20 +27,24 @@ class Server:
         """Dataset indexed by original position, starting at 0."""
         if self.__indexed_dataset is None:
             data = self.dataset()
-            # index the WHOLE dataset (matches checker examples)
             self.__indexed_dataset = {i: data[i] for i in range(len(data))}
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = 0,
+    def get_hyper_index(self, index: Optional[int] = None,
                         page_size: int = 10) -> Dict[str, Any]:
         """Return a page starting from a given index, robust to deletions.
 
-        Returns a dict:
-          - index: starting index used
-          - next_index: index to query next page from
-          - page_size: number of items actually returned
-          - data: the page rows
+        Returns:
+            {
+              "index": int,       # starting index used
+              "next_index": int,  # index to use for next page
+              "page_size": int,   # number of items actually returned
+              "data": List[List]  # page rows
+            }
         """
+        if index is None:
+            index = 0
+
         assert isinstance(index, int) and index >= 0
         assert isinstance(page_size, int) and page_size > 0
 
@@ -53,7 +57,6 @@ class Server:
 
         data: List[List] = []
         current = index
-        # collect up to page_size existing rows, skipping deleted holes
         while len(data) < page_size and current <= max_index:
             if current in indexed:
                 data.append(indexed[current])
