@@ -1,2 +1,2 @@
 // my comment
-printjson(db.adminCommand('listDatabases'));
+show dbs
