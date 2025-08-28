@@ -1,0 +1,8 @@
+{
+  "name": "es6-data-manipulation",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node 0-main.js"
+  }
+}
