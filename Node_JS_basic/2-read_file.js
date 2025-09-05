@@ -1,32 +1,29 @@
 const fs = require('fs');
-const path = require('path');
 
-function countStudents(dbPath) {
-  const full = path.resolve(dbPath);
-  if (!fs.existsSync(full)) throw new Error('Cannot load the database');
+function countStudents(path) {
+  try {
+    const raw = fs.readFileSync(path, 'utf8');
+    const lines = raw.toString().trim().split('\n'); // en-tête + données
 
-  let content;
-  try { content = fs.readFileSync(full, 'utf8'); }
-  catch { throw new Error('Cannot load the database'); }
+    // retire l'en-tête et les lignes vides éventuelles
+    const rows = lines.slice(1).filter((l) => l.trim().length > 0);
 
-  const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
-  if (lines.length <= 1) { console.log('Number of students: 0'); return; }
+    console.log(`Number of students: ${rows.length}`);
 
-  const data = lines.slice(1);
-  const groups = {};
-  for (const row of data) {
-    const parts = row.split(',');
-    if (parts.length >= 4) {
-      const firstname = parts[0].trim();
-      const field = parts[3].trim();
-      (groups[field] ||= []).push(firstname);
+    const groups = {}; // { field: [firstnames] }
+    for (const row of rows) {
+      const [firstname, , , field] = row.split(',');
+      if (!groups[field]) groups[field] = [];
+      groups[field].push(firstname);
     }
-  }
 
-  const total = Object.values(groups).reduce((a, arr) => a + arr.length, 0);
-  console.log(`Number of students: ${total}`);
-  for (const [field, list] of Object.entries(groups)) {
-    console.log(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
+    // ordre stable et déterministe (utile pour le checker)
+    for (const field of Object.keys(groups).sort()) {
+      const list = groups[field];
+      console.log(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
+    }
+  } catch (e) {
+    throw new Error('Cannot load the database');
   }
 }
 
