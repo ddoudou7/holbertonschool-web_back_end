@@ -7,30 +7,29 @@ function readDatabase(path) {
         reject(new Error('Cannot load the database'));
         return;
       }
-      const lines = String(data)
+      const lines = data
         .split('\n')
         .map((l) => l.trim())
         .filter((l) => l.length > 0);
 
       if (lines.length <= 1) {
+        // pas d'étudiants valides
         resolve({});
         return;
       }
 
-      const body = lines.slice(1);
-      const map = {}; // { CS: [firstnames], SWE: [firstnames] }
-
-      for (const row of body) {
+      const groups = {}; // { CS: [firstnames], SWE: [firstnames] }
+      const rows = lines.slice(1);
+      for (const row of rows) {
         const parts = row.split(',');
         if (parts.length >= 4) {
           const firstname = parts[0].trim();
           const field = parts[3].trim();
-          if (!map[field]) map[field] = [];
-          map[field].push(firstname);
+          if (!groups[field]) groups[field] = [];
+          groups[field].push(firstname);
         }
       }
-
-      resolve(map);
+      resolve(groups);
     });
   });
 }
