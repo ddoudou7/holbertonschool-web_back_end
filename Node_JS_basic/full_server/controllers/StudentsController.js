@@ -14,16 +14,15 @@ class StudentsController {
       const lines = [
         'This is the list of our students',
         `Number of students: ${total}`,
-        `Number of students in CS: ${cs.length}. List: ${cs.join(', ')}`,
-        `Number of students in SWE: ${swe.length}. List: ${swe.join(', ')}`,
       ];
+
+      // Ordre requis: CS puis SWE
+      lines.push(`Number of students in CS: ${cs.length}. List: ${cs.join(', ')}`);
+      lines.push(`Number of students in SWE: ${swe.length}. List: ${swe.join(', ')}`);
 
       res.status(200).send(lines.join('\n'));
     } catch (err) {
-      // Fix pour Check 3
-      res.status(500).send(
-        ['This is the list of our students', 'Cannot load the database'].join('\n')
-      );
+      res.status(500).send('Cannot load the database');
     }
   }
 
