@@ -12,11 +12,8 @@ class StudentsController {
       const fields = Object.keys(groups)
         .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
-      // Total = somme des tailles de chaque tableau
-      const total = fields.reduce((acc, f) => acc + ((groups[f] || []).length), 0);
-
-      // EXACTEMENT le format attendu
-      const lines = ['This is the list of our students', `Number of students: ${total}`];
+      // Format EXACT attendu (PAS de ligne "Number of students: ...")
+      const lines = ['This is the list of our students'];
 
       for (const f of fields) {
         const listArr = groups[f] || [];
@@ -26,7 +23,6 @@ class StudentsController {
 
       res.status(200).send(lines.join('\n'));
     } catch (err) {
-      // Pour Task 8 : en cas d’erreur -> message d’erreur seul
       res.status(500).send('Cannot load the database');
     }
   }
