@@ -7,12 +7,15 @@ class StudentsController {
 
     try {
       const groups = await readDatabase(dbPath);
-      const lines = ['This is the list of our students'];
 
-      // clés triées alphabétiquement (case-insensitive)
+      // Sort fields A->Z case-insensitive (e.g., CS then SWE)
       const fields = Object.keys(groups).sort((a, b) =>
         a.toLowerCase().localeCompare(b.toLowerCase())
       );
+
+      const total = fields.reduce((acc, f) => acc + (groups[f] ? groups[f].length : 0), 0);
+
+      const lines = ['This is the list of our students', `Number of students: ${total}`];
 
       for (const field of fields) {
         const list = groups[field] || [];
