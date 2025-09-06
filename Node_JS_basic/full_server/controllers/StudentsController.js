@@ -7,18 +7,17 @@ class StudentsController {
 
     try {
       const groups = await readDatabase(dbPath);
-      const cs = groups.CS || [];
-      const swe = groups.SWE || [];
-      const total = cs.length + swe.length;
+      const lines = ['This is the list of our students'];
 
-      const lines = [
-        'This is the list of our students',
-        `Number of students: ${total}`,
-      ];
+      // clés triées alphabétiquement (case-insensitive)
+      const fields = Object.keys(groups).sort((a, b) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
+      );
 
-      // Ordre requis: CS puis SWE
-      lines.push(`Number of students in CS: ${cs.length}. List: ${cs.join(', ')}`);
-      lines.push(`Number of students in SWE: ${swe.length}. List: ${swe.join(', ')}`);
+      for (const field of fields) {
+        const list = groups[field] || [];
+        lines.push(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
+      }
 
       res.status(200).send(lines.join('\n'));
     } catch (err) {
