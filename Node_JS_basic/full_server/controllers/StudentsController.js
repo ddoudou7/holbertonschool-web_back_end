@@ -8,25 +8,25 @@ class StudentsController {
     try {
       const groups = await readDatabase(dbPath);
 
-      // Tri des clés A->Z, insensible à la casse (CS avant SWE)
-      const fields = Object.keys(groups).sort((a, b) =>
-        a.toLowerCase().localeCompare(b.toLowerCase())
-      );
+      // Trier les clés de filière A→Z (insensible à la casse)
+      const fields = Object.keys(groups)
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
       // Total = somme des tailles de chaque tableau
-      const total = fields.reduce((acc, f) => acc + (groups[f]?.length || 0), 0);
+      const total = fields.reduce((acc, f) => acc + ((groups[f] || []).length), 0);
 
       // EXACTEMENT le format attendu
       const lines = ['This is the list of our students', `Number of students: ${total}`];
 
-      for (const field of fields) {
-        const list = groups[field] || [];
-        lines.push(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
+      for (const f of fields) {
+        const listArr = groups[f] || [];
+        const list = listArr.join(', ');
+        lines.push(`Number of students in ${f}: ${listArr.length}. List: ${list}`);
       }
 
       res.status(200).send(lines.join('\n'));
     } catch (err) {
-      // Pour Task 8, en cas d’erreur: 500 + message d’erreur seul
+      // Pour Task 8 : en cas d’erreur -> message d’erreur seul
       res.status(500).send('Cannot load the database');
     }
   }
