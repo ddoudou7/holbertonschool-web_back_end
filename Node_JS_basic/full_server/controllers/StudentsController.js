@@ -8,13 +8,15 @@ class StudentsController {
     try {
       const groups = await readDatabase(dbPath);
 
-      // Sort fields A->Z case-insensitive (e.g., CS then SWE)
+      // Tri des clés A->Z, insensible à la casse (CS avant SWE)
       const fields = Object.keys(groups).sort((a, b) =>
         a.toLowerCase().localeCompare(b.toLowerCase())
       );
 
-      const total = fields.reduce((acc, f) => acc + (groups[f] ? groups[f].length : 0), 0);
+      // Total = somme des tailles de chaque tableau
+      const total = fields.reduce((acc, f) => acc + (groups[f]?.length || 0), 0);
 
+      // EXACTEMENT le format attendu
       const lines = ['This is the list of our students', `Number of students: ${total}`];
 
       for (const field of fields) {
@@ -24,6 +26,7 @@ class StudentsController {
 
       res.status(200).send(lines.join('\n'));
     } catch (err) {
+      // Pour Task 8, en cas d’erreur: 500 + message d’erreur seul
       res.status(500).send('Cannot load the database');
     }
   }
